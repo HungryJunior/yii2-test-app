@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
+
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\EmailForm;
 
 class SiteController extends Controller
 {
@@ -49,7 +51,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new EmailForm();
+        if($model->load(Yii::$app->request->post())&&$model->validate()){
+            $model->saveEmail();
+            return $this->render('success');
+        }else{
+            return $this->render('index',['model'=>$model]);
+        }
+
     }
 
     public function actionLogin()
@@ -73,4 +82,5 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
 }

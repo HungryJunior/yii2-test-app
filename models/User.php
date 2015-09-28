@@ -28,8 +28,7 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['name', 'email', 'secret_key'], 'string', 'max' => 255]
+            [['name','secret_key'], 'string', 'max' => 255]
         ];
     }
 
