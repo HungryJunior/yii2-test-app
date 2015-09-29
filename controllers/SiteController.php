@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\EmailForm;
+use app\models\RegisterForm;
 
 class SiteController extends Controller
 {
@@ -65,9 +66,8 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->render('auth');
         }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -83,5 +83,24 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
+    public function actionRegister(){
+        $model_register_form = new RegisterForm();
+        //Если данные были отправлены и прошли валидацию
+        if($model_register_form->load(Yii::$app->request->post())&&$model_register_form->validate()){
+            //Если регистрация прошла успешно,данные были сохранены,авторизуем пользователя
+            if($user = $model_register_form->register()){
+                Yii::$app->user->login($user);
+                return $this->render('auth');
+            }else{
+                Yii::error("Ошибка при регистрации");
+                var_dump($model_register_form->getErrors());
+                //return $this->refresh();
+            }
+        }
+        return $this->render("register",["model"=>$model_register_form]);
+    }
+
+
 
 }

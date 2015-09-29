@@ -30,7 +30,7 @@ class EmailForm extends Model
         $model_user = new User();
         $model_user->email = $this->email;
         $model_user->generateSecretKey();
-        $this->secret_key = $model_user->getSecretKey();
+        $this->secret_key = $model_user->getAuthKey();
         $model_user->save();
     }
 
@@ -41,7 +41,7 @@ class EmailForm extends Model
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($this->email)
             ->setSubject('Yii2-test-app')
-            ->setHtmlBody("<a href=ya.ru?key=".$this->secret_key.">Happy</a>")
+            ->setHtmlBody("<span>Перейти на <a href=yii2-email-registration.loc/site/register?key=".$this->secret_key.">сайт</a></span>")
             ->send();
     }
 

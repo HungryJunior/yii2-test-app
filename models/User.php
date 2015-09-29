@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -12,7 +13,7 @@ use Yii;
  * @property string $email
  * @property string $secret_key
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     /**
      * @inheritdoc
@@ -25,12 +26,15 @@ class User extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
-{
-    return [
-        [['name'], 'string', 'max' => 255]
-    ];
-}
+//    public function rules()
+//{
+//    return [
+//        [['email'],'email'],
+//        [['email'],'required'],
+//        [['secret_key'],'unique'],
+//        [['secret_key'],'string', 'max' => 255]
+//    ];
+//}
 
     /**
      * @inheritdoc
@@ -45,11 +49,37 @@ class User extends \yii\db\ActiveRecord
         ];
     }
 
+    //Ф-я поиска пользователя по имени
+    public static function findByUsername($username)
+    {
+        return static::findOne(["name"=>$username]);
+    }
+
     public function generateSecretKey(){
         $this->secret_key = Yii::$app->security->generateRandomString();
     }
 
-    public function getSecretKey(){
+    public function getAuthKey(){
         return $this->secret_key;
+    }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['secret_key' => $token]);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->secret_key === $authKey;
     }
 }
