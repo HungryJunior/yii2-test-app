@@ -14,18 +14,35 @@ use yii\base\Model;
 class EmailForm extends Model
 {
     public $email;//Переменная для хранения введеного пользователем email адреса
+    public $secret_key;//Переменная для хранения уникального ключа для каждого пользователя
 
     public function rules(){
         return [
             [['email'],'email'],
-            [['email'],'required']
+            [['email'],'required'],
+            [['secret_key'],'unique'],
+            [['secret_key'],'string', 'max' => 255]
         ];
     }
 
-    //Ф-я для сохранения email алреса в БД
+    //Ф-я для сохранения email адреса в БД
     public function saveEmail(){
         $model_user = new User();
         $model_user->email = $this->email;
+        $model_user->generateSecretKey();
+        $this->secret_key = $model_user->getSecretKey();
         $model_user->save();
     }
+
+    //Ф-я для отправки сообщения на указаную почту
+    public function sendEmail(){
+        $model_user = new User();
+        return Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($this->email)
+            ->setSubject('Yii2-test-app')
+            ->setHtmlBody("<a href=ya.ru?key=".$this->secret_key.">Happy</a>")
+            ->send();
+    }
+
 }

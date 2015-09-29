@@ -53,7 +53,8 @@ class SiteController extends Controller
     {
         $model = new EmailForm();
         if($model->load(Yii::$app->request->post())&&$model->validate()){
-            $model->saveEmail();
+            $model->saveEmail();//сохраняем email и secret_key в БД
+            $model->sendEmail();//Отправляем пользователю письмо со ссылкой на личный кабинет
             return $this->render('success');
         }else{
             return $this->render('index',['model'=>$model]);

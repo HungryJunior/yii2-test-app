@@ -26,11 +26,11 @@ class User extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public function rules()
-    {
-        return [
-            [['name','secret_key'], 'string', 'max' => 255]
-        ];
-    }
+{
+    return [
+        [['name'], 'string', 'max' => 255]
+    ];
+}
 
     /**
      * @inheritdoc
@@ -43,5 +43,13 @@ class User extends \yii\db\ActiveRecord
             'email' => 'Email',
             'secret_key' => 'Secret Key',
         ];
+    }
+
+    public function generateSecretKey(){
+        $this->secret_key = Yii::$app->security->generateRandomString();
+    }
+
+    public function getSecretKey(){
+        return $this->secret_key;
     }
 }
