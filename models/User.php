@@ -26,15 +26,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-//    public function rules()
-//{
-//    return [
-//        [['email'],'email'],
-//        [['email'],'required'],
-//        [['secret_key'],'unique'],
-//        [['secret_key'],'string', 'max' => 255]
-//    ];
-//}
+    public function rules()
+{
+    return [
+        [['email'],'email'],
+        [['email'],'required'],
+        [['secret_key'],'unique'],
+        [['secret_key'],'string', 'max' => 255]
+    ];
+}
 
     /**
      * @inheritdoc

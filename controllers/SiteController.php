@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-
-use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -11,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\EmailForm;
 use app\models\RegisterForm;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -91,7 +90,8 @@ class SiteController extends Controller
             //Если регистрация прошла успешно,данные были сохранены,авторизуем пользователя
             if($user = $model_register_form->register()){
                 Yii::$app->user->login($user);
-                return $this->render('auth');
+                $url = Url::toRoute(['login']);
+                return $this->redirect($url);
             }else{
                 Yii::error("Ошибка при регистрации");
                 var_dump($model_register_form->getErrors());
@@ -101,6 +101,18 @@ class SiteController extends Controller
         return $this->render("register",["model"=>$model_register_form]);
     }
 
+    public function actionAllocation(){
+        if(Yii::$app->user->isGuest){
+            $request = Yii::$app->request;
+            if ($request->isGet){
+                $key = $request->get('key');
+                $url = Url::toRoute(['register', 'key' => $key]);
+                return $this->redirect($url);
+            }
+        }else{
+            $url = Url::toRoute(['login']);
+            return $this->redirect($url);
+        }
 
-
+    }
 }

@@ -36,12 +36,11 @@ class EmailForm extends Model
 
     //Ф-я для отправки сообщения на указаную почту
     public function sendEmail(){
-        $model_user = new User();
         return Yii::$app->mailer->compose()
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($this->email)
             ->setSubject('Yii2-test-app')
-            ->setHtmlBody("<span>Перейти на <a href=yii2-email-registration.loc/site/register?key=".$this->secret_key.">сайт</a></span>")
+            ->setHtmlBody("<span>Перейти на <a href=yii2-email-registration.loc/site/allocation?key=".$this->secret_key.">сайт</a></span>")
             ->send();
     }
 

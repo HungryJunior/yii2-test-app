@@ -11,7 +11,6 @@ use yii\base\Model;
 class LoginForm extends Model
 {
     public $name;
-    public $password;
     public $rememberMe = true;
 
     private $_user = false;
@@ -27,8 +26,6 @@ class LoginForm extends Model
             [['name'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
         ];
     }
 
