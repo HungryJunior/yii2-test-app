@@ -2,10 +2,8 @@
 
 namespace app\controllers;
 
-use app\models\EditForm;
 use app\models\User;
 use Yii;
-use yii\base\Model;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -131,8 +129,8 @@ class SiteController extends Controller
     {
         $id = Yii::$app->user->getId();
         $model = User::findIdentity($id);
-        if($model->load(Yii::$app->request->post())){
-            var_dump($model);
+        if($model->load(Yii::$app->request->post())&&$model->validate()){
+            $model->save(false);
 
         }else{
             return $this->render('edit',['model'=>$model]);
