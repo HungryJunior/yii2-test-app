@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Изменение логина';
+$this->title = 'Редактирование имени пользователя';
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>

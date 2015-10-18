@@ -2,9 +2,10 @@
 
 namespace app\controllers;
 
-use app\models\EditUserForm;
+use app\models\EditForm;
 use app\models\User;
 use Yii;
+use yii\base\Model;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -15,7 +16,6 @@ use yii\helpers\Url;
 
 class SiteController extends Controller
 {
-    public $name;
     public function behaviors()
     {
         return [
@@ -127,17 +127,17 @@ class SiteController extends Controller
         return $this->render("auth");
     }
 
-    public function actionEditLogin(){
-        $id = \Yii::$app->user->getId();
-        $user = new User;
-        $user = $user->findIdentity($id);
-        if ($this->name = $user->load(Yii::$app->request->post())){
-            $user->name = $this->name;
-            //$user->update();
+    public function actionEditLogin()
+    {
+        $id = Yii::$app->user->getId();
+        $model = User::findIdentity($id);
+        if($model->load(Yii::$app->request->post())){
+            var_dump($model);
 
-            //$model->save(false);
-        }else {
-        return $this->render("edit",["model"=>$user]);
+        }else{
+            return $this->render('edit',['model'=>$model]);
         }
+
+
     }
 }
