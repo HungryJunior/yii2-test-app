@@ -70,12 +70,26 @@ class SiteController extends Controller
             return $this->redirect($url);
         }
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            /*Проверяем есть ли такой логин в БД.
+            Да - редирект в кабинет, Нет - возвр.ошибку*/
+            if(User::findByUsername($model->name)){
+                $model->login();
+                $url = Url::toRoute(['office']);
+                return $this->redirect($url);
+            }else{
+                $error = "Пользователь не зарегистрирован!";
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => $error,
+                ]);
+            }
+        }else{
+            return $this->render('login', [
+                'model' => $model
+            ]);
         }
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+
     }
 
     public function actionLogout()
